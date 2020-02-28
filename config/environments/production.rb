@@ -97,16 +97,29 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-      :enable_starttls_auto => true,
-      :address => "smtp.gmail.com",
-      :port => 587,
-      :domain => 'smtp.gmail.com',
-      :user_name => ENV['EMAIL_ADDRESS'], #　gmail
-      :password => ENV['EMAIL_PASSWORD'],  #　パスワード
-      :authentication => 'login',
-    }
+#  config.action_mailer.delivery_method = :smtp
+#  config.action_mailer.smtp_settings = {
+#      :enable_starttls_auto => true,
+#      :address => "smtp.gmail.com",
+#      :port => 587,
+#      :domain => 'smtp.gmail.com',
+#      :user_name => ENV['EMAIL_ADDRESS'], #　gmail
+#      :password => ENV['EMAIL_PASSWORD'],  #　パスワード
+#      :authentication => 'login',
+#    }
+
+    config.action_mailer.default_url_options = { host: 'https://devise-test-2020.herokuapp.com/' } #hoge.herokuapp.com
+    ActionMailer::Base.delivery_method = :smtp
+    ActionMailer::Base.smtp_settings =
+    {
+   user_name: ENV['SENDGRID_USERNAME'],
+   password: ENV['SENDGRID_PASSWORD'],
+   domain: "heroku.com",
+   address: "smtp.sendgrid.net",
+   port: 587,
+   authentication: :plain,
+   enable_starttls_auto: true
+   }
   # The `database_resolver` class is used by the middleware to determine which
   # database is appropriate to use based on the time delay.
   #
@@ -114,6 +127,8 @@ Rails.application.configure do
   # timestamps for the last write to the primary. The resolver uses the context
   # class timestamps to determine how long to wait before reading from the
   # replica.
+
+
   #
   # By default Rails will store a last write timestamp in the session. The
   # DatabaseSelector middleware is designed as such you can define your own
